@@ -3,16 +3,45 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=2.0" />
   <title>Workout Tracker</title>
+  <link rel="icon" href="icon512_rounded.png" type="image/x-icon">
+  <link rel="manifest" href="manifest.json">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    .btn-set {
-      @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-transform;
+    html {
+      scroll-behavior: smooth;
+      font-size: x-large;
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
     }
 
-    .btn-set.completed {
-      @apply bg-green-500 scale-110;
+    .btn-minus {
+      color: #ffffff;
+      border: #ff0000;
+      border-radius: 25px;
+      cursor: pointer;
+      padding: 2px;
+      transition: background-color 0.3s ease;
+      font-size: x-large;
+    }
+
+    .btn-minus:hover {
+      background-color: #751a1a;
+    }
+
+    .btn-plus {
+      color: #ffffff;
+      border: #00ff00;
+      border-radius: 25px;
+      padding: 2px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-size: x-large;
+
+    }
+
+    .btn-plus:hover {
+      background-color: #35751a;
     }
 
     .fade-in {
@@ -59,7 +88,7 @@
             { name: "Chest Fly", sets: 3, reps: 10, weight: 35, completedSets: 0 },
             { name: "FacePulls", sets: 3, reps: 10, weight: 35, completedSets: 0 },
             { name: "Tricep Pushdowns or Triceps Overhead extension", sets: 3, reps: 10, weight: 35, completedSets: 0 },
-            { name: "Cardio", sets: 3, reps: 10, weight: 35, completedSets: 0 }
+            { name: "Cardio", sets: 1, reps: 10, weight: 35, completedSets: 0 }
 
           ]
         },
@@ -71,7 +100,7 @@
             { name: "Preacher", sets: 3, reps: 12, weight: 45, completedSets: 0 },
             { name: "Leg raises or band pull aparts", sets: 3, reps: 12, weight: 45, completedSets: 0 },
             { name: "Cable Hammer Curl", sets: 3, reps: 12, weight: 45, completedSets: 0 },
-            { name: "Cardio", sets: 3, reps: 10, weight: 35, completedSets: 0 }
+            { name: "Cardio", sets: 1, reps: 10, weight: 35, completedSets: 0 }
 
           ]
         },
@@ -88,7 +117,7 @@
             { name: "Shoulder Press", sets: 3, reps: 10, weight: 35, completedSets: 0 },
             { name: "Lateral Raise", sets: 3, reps: 10, weight: 35, completedSets: 0 },
             { name: "Plank and Lying Leg Raises", sets: 3, reps: 10, weight: 35, completedSets: 0 },
-            { name: "Cardio", sets: 3, reps: 10, weight: 35, completedSets: 0 }
+            { name: "Cardio", sets: 1, reps: 10, weight: 35, completedSets: 0 }
           ]
         }
       ]
@@ -130,15 +159,15 @@
       const workout = data.workouts[workoutIndex];
       container.innerHTML = workout.exercises.map((ex, i) => `
         <div class="bg-gray-800 p-4 rounded fade-in">
-          <div class="flex justify-between items-center mb-2">
+          <div class="flex justify-between items-center mb-2 items-baseline">
             <span class="font-bold text-lg">${ex.name}</span>
             <input type="number" value="${ex.weight}" data-workout="${workoutIndex}" data-ex="${i}" class="bg-gray-700 text-white w-20 p-1 rounded weight-input">
           </div>
           <div class="flex space-x-2">
 
-<button class="btn-plus" data-workout="${workoutIndex}" data-ex="${i}" >+</button>
+<button class="btn-plus" data-workout="${workoutIndex}" data-ex="${i}" >➕</button>
             <span class="text-sm">Sets Left: ${ex.sets - ex.completedSets}</span>
-<button class="btn-minus" data-workout="${workoutIndex}" data-ex="${i}" >-</button>
+<button class="btn-minus" data-workout="${workoutIndex}" data-ex="${i}" >➖</button>
 
 
             </div>
