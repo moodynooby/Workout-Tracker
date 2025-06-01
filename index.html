@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workout Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .btn-set {
+      @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-transform;
+    }
+
+    .btn-set.completed {
+      @apply bg-green-500 scale-110;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen p-4">
+  <div class="max-w-md mx-auto">
+    <h1 class="text-3xl font-bold text-center mb-2">🏋️ Workout Tracker</h1>
+    <div id="stats" class="text-center mb-4 text-lg">Level: 1 | EXP: 0/100</div>
+    <select id="workoutSelect" class="w-full p-2 mb-4 bg-gray-800 text-white rounded"></select>
+    <div id="exerciseList" class="space-y-4"></div>
+    <button id="editBtn" class="mt-6 w-full p-2 bg-yellow-500 text-black font-bold rounded">🛠️ Edit Workout</button>
+    <div id="editor" class="hidden mt-4">
+      <textarea id="jsonEditor" class="w-full h-64 p-2 text-black rounded"></textarea>
+      <button id="saveJsonBtn" class="mt-2 w-full p-2 bg-green-500 text-black font-bold rounded">💾 Save</button>
+    </div>
+    <audio id="ding" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  </div>
+
+  <script>
+    const defaultData = {
+      level: 1,
+      exp: 0,
+      workouts: [
+        {
+          name: "TRICEST",
+          exercises: [
+            { name: "Chest Press", sets: 3, reps: 10, weight: 40, completedSets: 0 },
+            { name: "Chest Fly", sets: 3, reps: 10, weight: 35, completedSets: 0 }
+          ]
+        },
+        {
+          name: "BIBACK",
+          exercises: [
+            { name: "Lat Pulldown", sets: 3, reps: 12, weight: 50, completedSets: 0 },
+            { name: "Seated Row", sets: 3, reps: 12, weight: 45, completedSets: 0 }
+          ]
+        }
+      ]
+    };
+
+    function loadData() {
+      const saved = localStorage.getItem("workoutData");
+      return saved ? JSON.parse(saved) : defaultData;
+    }
+
+    function saveData(data) {
+      localStorage.setItem("workoutData", JSON.stringify(data));
+    }
+
+    function updateStats(data) {
+      const statBox = document.getElementById("stats");
+      statBox.textContent = `Level: ${data.level} | EXP: ${data.exp % 100}/100`;
+    }
+
+    function gainExp(data, amount = 10) {
+      data.exp += amount;
+      if (data.exp >= 100) {
+        data.exp = 0;
+        data.level++;
+        alert("🎉 Level Up!");
+      }
+      updateStats(data);
+    }
+
+    function renderWorkouts(data) {
+      const select = document.getElementById("workoutSelect");
+      select.innerHTML = data.workouts.map((w, i) => `<option value="${i}">${w.name}</option>`).join("");
+      renderExercises(data, 0);
+      select.onchange = (e) => renderExercises(data, e.target.value);
+    }
+
+    function renderExercises(data, workoutIndex) {
+      const container = document.getElementById("exerciseList");
+      const workout = data.workouts[workoutIndex];
+      container.innerHTML = workout.exercises.map((ex, i) => `
+        <div class="bg-gray-800 p-4 rounded fade-in">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-lg">${ex.name}</span>
+            <input type="number" value="${ex.weight}" data-workout="${workoutIndex}" data-ex="${i}" class="bg-gray-700 text-white w-20 p-1 rounded weight-input">
+          </div>
+          <div class="flex space-x-2">
+            ${Array.from({ length: ex.sets }).map((_, j) => `
+              <button class="btn-set ${j < ex.completedSets ? 'completed' : ''}" data-workout="${workoutIndex}" data-ex="${i}" data-set="${j}">
+                ${j + 1}
+              </button>`).join("")}
+          </div>
+        </div>`).join("");
+
+      container.querySelectorAll(".btn-set").forEach(btn => {
+        btn.onclick = () => {
+          const w = +btn.dataset.workout;
+          const ex = +btn.dataset.ex;
+          const dataObj = data.workouts[w].exercises[ex];
+          if (dataObj.completedSets < dataObj.sets) {
+            dataObj.completedSets++;
+            document.getElementById("ding").play();
+            gainExp(data);
+          }
+          saveData(data);
+          renderExercises(data, w);
+        };
+      });
+
+      container.querySelectorAll(".weight-input").forEach(input => {
+        input.onchange = (e) => {
+          const w = +input.dataset.workout;
+          const ex = +input.dataset.ex;
+          data.workouts[w].exercises[ex].weight = +e.target.value;
+          saveData(data);
+        };
+      });
+    }
+
+    function setupEditor(data) {
+      const editor = document.getElementById("editor");
+      const textarea = document.getElementById("jsonEditor");
+      const btn = document.getElementById("editBtn");
+      const saveBtn = document.getElementById("saveJsonBtn");
+
+      btn.onclick = () => {
+        editor.classList.toggle("hidden");
+        textarea.value = JSON.stringify(data, null, 2);
+      };
+
+      saveBtn.onclick = () => {
+        try {
+          const newData = JSON.parse(textarea.value);
+          saveData(newData);
+          renderWorkouts(newData);
+          updateStats(newData);
+          editor.classList.add("hidden");
+        } catch (e) {
+          alert("Invalid JSON!");
+        }
+      };
+    }
+
+    const data = loadData();
+    renderWorkouts(data);
+    updateStats(data);
+    setupEditor(data);
+  </script>
+</body>
+
+</html>
