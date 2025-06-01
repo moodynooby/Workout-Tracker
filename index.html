@@ -56,14 +56,39 @@
           name: "TRICEST",
           exercises: [
             { name: "Chest Press", sets: 3, reps: 10, weight: 40, completedSets: 0 },
-            { name: "Chest Fly", sets: 3, reps: 10, weight: 35, completedSets: 0 }
+            { name: "Chest Fly", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "FacePulls", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Tricep Pushdowns or Triceps Overhead extension", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Cardio", sets: 3, reps: 10, weight: 35, completedSets: 0 }
+
           ]
         },
         {
           name: "BIBACK",
           exercises: [
             { name: "Lat Pulldown", sets: 3, reps: 12, weight: 50, completedSets: 0 },
-            { name: "Seated Row", sets: 3, reps: 12, weight: 45, completedSets: 0 }
+            { name: "Seated Row", sets: 3, reps: 12, weight: 45, completedSets: 0 },
+            { name: "Preacher", sets: 3, reps: 12, weight: 45, completedSets: 0 },
+            { name: "Leg raises or band pull aparts", sets: 3, reps: 12, weight: 45, completedSets: 0 },
+            { name: "Cable Hammer Curl", sets: 3, reps: 12, weight: 45, completedSets: 0 },
+            { name: "Cardio", sets: 3, reps: 10, weight: 35, completedSets: 0 }
+
+          ]
+        },
+        {
+          name: "LEHOULDER",
+          exercises: [
+            { name: "Leg Press", sets: 3, reps: 10, weight: 40, completedSets: 0 },
+            { name: "Lunges", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Squats", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Leg Extension", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Seated Leg Curls", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Reverse Leg Curls", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Calf Raise", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Shoulder Press", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Lateral Raise", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Plank and Lying Leg Raises", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Cardio", sets: 3, reps: 10, weight: 35, completedSets: 0 }
           ]
         }
       ]
@@ -110,27 +135,38 @@
             <input type="number" value="${ex.weight}" data-workout="${workoutIndex}" data-ex="${i}" class="bg-gray-700 text-white w-20 p-1 rounded weight-input">
           </div>
           <div class="flex space-x-2">
-            ${Array.from({ length: ex.sets }).map((_, j) => `
-              <button class="btn-set ${j < ex.completedSets ? 'completed' : ''}" data-workout="${workoutIndex}" data-ex="${i}" data-set="${j}">
-                ${j + 1}
-              </button>`).join("")}
-          </div>
+
+<button class="btn-plus" data-workout="${workoutIndex}" data-ex="${i}" >+</button>
+            <span class="text-sm">Sets Left: ${ex.sets - ex.completedSets}</span>
+<button class="btn-minus" data-workout="${workoutIndex}" data-ex="${i}" >-</button>
+
+
+            </div>
         </div>`).join("");
 
-      container.querySelectorAll(".btn-set").forEach(btn => {
+      container.querySelectorAll(".btn-plus").forEach(btn => {
         btn.onclick = () => {
           const w = +btn.dataset.workout;
           const ex = +btn.dataset.ex;
           const dataObj = data.workouts[w].exercises[ex];
-          if (dataObj.completedSets < dataObj.sets) {
-            dataObj.completedSets++;
-            document.getElementById("ding").play();
-            gainExp(data);
-          }
+          dataObj.completedSets++;
+          document.getElementById("ding").play();
+          gainExp(data);
           saveData(data);
           renderExercises(data, w);
         };
       });
+      container.querySelectorAll(".btn-minus").forEach(btn => {
+        btn.onclick = () => {
+          const w = +btn.dataset.workout;
+          const ex = +btn.dataset.ex;
+          const dataObj = data.workouts[w].exercises[ex];
+          dataObj.completedSets--;
+          saveData(data);
+          renderExercises(data, w);
+        };
+      });
+
 
       container.querySelectorAll(".weight-input").forEach(input => {
         input.onchange = (e) => {
