@@ -8,72 +8,31 @@
   <link rel="icon" href="icon512_rounded.png" type="image/x-icon">
   <link rel="manifest" href="manifest.json">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    html {
-      scroll-behavior: smooth;
-      font-size: x-large;
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
-    }
-
-    .btn-minus {
-      color: #ffffff;
-      border: #ff0000;
-      border-radius: 25px;
-      cursor: pointer;
-      padding: 2px;
-      transition: background-color 0.3s ease;
-      font-size: x-large;
-    }
-
-    .btn-minus:hover {
-      background-color: #751a1a;
-    }
-
-    .btn-plus {
-      color: #ffffff;
-      border: #00ff00;
-      border-radius: 25px;
-      padding: 2px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-size: x-large;
-
-    }
-
-    .btn-plus:hover {
-      background-color: #35751a;
-    }
-
-    .fade-in {
-      animation: fadeIn 0.5s ease-in;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="w3.css">
+  <link rel="stylesheet" href="index.css">
+  <script src="server.js"></script>
 </head>
 
 <body class="bg-gray-900 text-white min-h-screen p-4">
-  <div class="max-w-md mx-auto">
-    <h1 class="text-3xl font-bold text-center mb-2">🏋️ Workout Tracker</h1>
+  <div class="exercise-iframe max-w-md mx-auto" id="exercise-iframe">
+    <h1 class="text-3xl font-bold text-center mb-2">🏋️ Workout Tracker <button onclick="backend()"
+        class="w3-btn w3-teal ">Server</button>
+    </h1>
     <div id="stats" class="text-center mb-4 text-lg">Level: 1 | EXP: 0/100</div>
     <select id="workoutSelect" class="w-full p-2 mb-4 bg-gray-800 text-white rounded"></select>
     <div id="exerciseList" class="space-y-4"></div>
-    <button id="editBtn" class="mt-6 w-full p-2 bg-yellow-500 text-black font-bold rounded">🛠️ Edit Workout</button>
+    <audio id="ding" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  </div>
+
+  <div class="hidden" id="server-iframe">
+    <button id="editBtn" class="mt-6 w-full p-2 bg-yellow-500 text-black font-bold rounded">🛠️ Edit
+      Workout</button>
+
     <div id="editor" class="hidden mt-4">
       <textarea id="jsonEditor" class="w-full h-64 p-2 text-black rounded"></textarea>
       <button id="saveJsonBtn" class="mt-2 w-full p-2 bg-green-500 text-black font-bold rounded">💾 Save</button>
+
     </div>
-    <audio id="ding" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
   </div>
 
   <script>
@@ -122,6 +81,10 @@
         }
       ]
     };
+    function backend() {
+      document.getElementById("exercise-iframe").classList.add("hidden");
+      document.getElementById("server-iframe").classList.remove("hidden");
+    }
 
     function loadData() {
       const saved = localStorage.getItem("workoutData");
@@ -165,9 +128,9 @@
           </div>
           <div class="flex space-x-2">
 
-<button class="btn-plus" data-workout="${workoutIndex}" data-ex="${i}" >➕</button>
-            <span class="text-sm">Sets Left: ${ex.sets - ex.completedSets}</span>
-<button class="btn-minus" data-workout="${workoutIndex}" data-ex="${i}" >➖</button>
+<button class="btn-plus w3-btn w3-round-xxlarge w3-green w3-hover-yellow" data-workout="${workoutIndex}" data-ex="${i}" >➕</button>
+            <p class="text-sm">Sets Left: ${ex.sets - ex.completedSets}</p>
+<button class="btn-minus w3-btn w3-round-xxlarge w3-red w3-hover-yellow" data-workout="${workoutIndex}" data-ex="${i}" >➖</button>
 
 
             </div>
