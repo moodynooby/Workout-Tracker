@@ -12,11 +12,23 @@
   <link rel="stylesheet" href="index.css">
   <script src="server.js"></script>
 </head>
+<!-- Icons from iconoir -->
 
 <body class="bg-gray-900 text-white min-h-screen p-4">
   <div class="exercise-iframe max-w-md mx-auto" id="exercise-iframe">
     <h1 class="text-3xl font-bold text-center mb-2">🏋️ Workout Tracker <button onclick="backend()"
-        class="w3-btn w3-teal ">Server</button>
+        class="w3-btn w3-teal w3-circle ">
+        <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24"
+          fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffffff">
+          <path
+            d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+            stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path
+            d="M19.6224 10.3954L18.5247 7.7448L20 6L18 4L16.2647 5.48295L13.5578 4.36974L12.9353 2H10.981L10.3491 4.40113L7.70441 5.51596L6 4L4 6L5.45337 7.78885L4.3725 10.4463L2 11V13L4.40111 13.6555L5.51575 16.2997L4 18L6 20L7.79116 18.5403L10.397 19.6123L11 22H13L13.6045 19.6132L16.2551 18.5155C16.6969 18.8313 18 20 18 20L20 18L18.5159 16.2494L19.6139 13.598L21.9999 12.9772L22 11L19.6224 10.3954Z"
+            stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
+
     </h1>
     <div id="stats" class="text-center mb-4 text-lg">Level: 1 | EXP: 0/100</div>
     <select id="workoutSelect" class="w-full p-2 mb-4 bg-gray-800 text-white rounded"></select>
@@ -27,7 +39,12 @@
   <div class="hidden" id="server-iframe">
     <button id="editBtn" class="mt-6 w-full p-2 bg-yellow-500 text-black font-bold rounded">🛠️ Edit
       Workout</button>
-
+    <button id="resetBtn" class="mt-6 w-full p-2 bg-red-500 text-black font-bold rounded" onclick="resetWorkout()">🔄
+      Reset
+      Workout</button>
+    <button id="newCycle" class="mt-6 w-full p-2 bg-green-500 text-black font-bold rounded" onclick="newCycle()">🔄
+      New Cycle
+    </button>
     <div id="editor" class="hidden mt-4">
       <textarea id="jsonEditor" class="w-full h-64 p-2 text-black rounded"></textarea>
       <button id="saveJsonBtn" class="mt-2 w-full p-2 bg-green-500 text-black font-bold rounded">💾 Save</button>
@@ -46,7 +63,7 @@
             { name: "Chest Press", sets: 3, reps: 10, weight: 40, completedSets: 0 },
             { name: "Chest Fly", sets: 3, reps: 10, weight: 35, completedSets: 0 },
             { name: "FacePulls", sets: 3, reps: 10, weight: 35, completedSets: 0 },
-            { name: "Tricep Pushdowns or Triceps Overhead extension", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Tricep Pushdowns ", sets: 3, reps: 10, weight: 35, completedSets: 0 },
             { name: "Cardio", sets: 1, reps: 10, weight: 35, completedSets: 0 }
 
           ]
@@ -57,7 +74,7 @@
             { name: "Lat Pulldown", sets: 3, reps: 12, weight: 50, completedSets: 0 },
             { name: "Seated Row", sets: 3, reps: 12, weight: 45, completedSets: 0 },
             { name: "Preacher", sets: 3, reps: 12, weight: 45, completedSets: 0 },
-            { name: "Leg raises or band pull aparts", sets: 3, reps: 12, weight: 45, completedSets: 0 },
+            { name: "Cable Band Pull Aparts", sets: 3, reps: 12, weight: 45, completedSets: 0 },
             { name: "Cable Hammer Curl", sets: 3, reps: 12, weight: 45, completedSets: 0 },
             { name: "Cardio", sets: 1, reps: 10, weight: 35, completedSets: 0 }
 
@@ -128,9 +145,9 @@
           </div>
           <div class="flex space-x-2">
 
-<button class="btn-plus w3-btn w3-round-xxlarge w3-green w3-hover-yellow" data-workout="${workoutIndex}" data-ex="${i}" >➕</button>
+<button class="btn-plus w3-btn w3-round-xxlarge w3-green w3-hover-black" data-workout="${workoutIndex}" data-ex="${i}" ><?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffffff" style="--darkreader-inline-color: var(--darkreader-text-ffffff, #e8e6e3);" data-darkreader-inline-color=""><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="--darkreader-inline-stroke: #ffffff;" data-darkreader-inline-stroke=""></path></svg></button>
             <p class="text-sm">Sets Left: ${ex.sets - ex.completedSets}</p>
-<button class="btn-minus w3-btn w3-round-xxlarge w3-red w3-hover-yellow" data-workout="${workoutIndex}" data-ex="${i}" >➖</button>
+<button class="btn-minus w3-btn w3-round-xxlarge w3-red w3-hover-black" data-workout="${workoutIndex}" data-ex="${i}" ><?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffffff" style="--darkreader-inline-color: var(--darkreader-text-ffffff, #e8e6e3);" data-darkreader-inline-color=""><path d="M6 12H18" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="--darkreader-inline-stroke: #ffffff;" data-darkreader-inline-stroke=""></path></svg></button>
 
 
             </div>
@@ -194,6 +211,36 @@
       };
     }
 
+    function resetWorkout(data) {
+      const resetBtn = document.getElementById("resetBtn");
+      resetBtn.onclick = () => {
+        saveData(defaultData);
+        renderWorkouts(defaultData);
+        location.reload(); // Refresh the page
+      };
+    }
+
+    function newCycle() {
+      const newCycleBtn = document.getElementById("newCycle");
+      newCycleBtn.onclick = () => {
+        const savedData = loadData();
+
+        const newData = {
+          ...savedData,
+          workouts: savedData.workouts.map(workout => ({
+            ...workout,
+            exercises: workout.exercises.map(ex => ({
+              ...ex,
+              completedSets: 0 // Reset completed sets
+            }))
+          }))
+        };
+        saveData(newData);
+        renderWorkouts(newData);
+        location.reload(); // Refresh the page
+
+      };
+    }
     const data = loadData();
     renderWorkouts(data);
     updateStats(data);

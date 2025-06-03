@@ -19,3 +19,11 @@ html {
     transform: translateY(0);
   }
 }
+#server-iframe {
+  border: orange;
+  width: 70%;
+  height: 90%;
+  border-radius: 10px;
+  text-align: center;
+  margin-left: 15%;
+}
