@@ -60,38 +60,37 @@
         {
           name: "TRICEST",
           exercises: [
-            { name: "Chest Press", sets: 3, reps: 10, weight: 40, completedSets: 0 },
-            { name: "Chest Fly", sets: 3, reps: 10, weight: 35, completedSets: 0 },
-            { name: "FacePulls", sets: 3, reps: 10, weight: 35, completedSets: 0 },
-            { name: "Tricep Pushdowns ", sets: 3, reps: 10, weight: 35, completedSets: 0 },
-            { name: "Cardio", sets: 1, reps: 10, weight: 35, completedSets: 0 }
-
+            { name: "Chest Press", sets: 3, reps: 10, completedSets: 0 },
+            { name: "Chest Fly", sets: 3, reps: 10, completedSets: 0 },
+            { name: "FacePulls", sets: 3, reps: 10, completedSets: 0 },
+            { name: "Tricep Pushdowns ", sets: 3, reps: 10, completedSets: 0 },
+            { name: "Tricep Overhead Extension ", sets: 3, reps: 10, completedSets: 0 },
+            { name: "Cardio", sets: 1, reps: 10, completedSets: 0 }
           ]
         },
         {
           name: "BIBACK",
           exercises: [
-            { name: "Lat Pulldown", sets: 3, reps: 12, weight: 50, completedSets: 0 },
-            { name: "Seated Row", sets: 3, reps: 12, weight: 45, completedSets: 0 },
-            { name: "Preacher", sets: 3, reps: 12, weight: 45, completedSets: 0 },
-            { name: "Cable Band Pull Aparts", sets: 3, reps: 12, weight: 45, completedSets: 0 },
-            { name: "Cable Hammer Curl", sets: 3, reps: 12, weight: 45, completedSets: 0 },
-            { name: "Cardio", sets: 1, reps: 10, weight: 35, completedSets: 0 }
-
+            { name: "Lat Pulldown", sets: 3, reps: 12, completedSets: 0 },
+            { name: "Seated Row", sets: 3, reps: 12, completedSets: 0 },
+            { name: "Preacher", sets: 3, reps: 12, completedSets: 0 },
+            { name: "Cable Band Pull Aparts", sets: 3, reps: 12, completedSets: 0 },
+            { name: "Cable Hammer Curl", sets: 3, reps: 12, completedSets: 0 },
+            { name: "Cardio", sets: 1, reps: 10, completedSets: 0 }
           ]
         },
         {
           name: "Shoug",
           exercises: [
-            { name: "Leg Press", sets: 3, reps: 10, weight: 40, completedSets: 0 },
-            { name: "Lunges", sets: 2, reps: 10, weight: 35, completedSets: 0 },
-            { name: "Assisted Squats", sets: 1, reps: 20, weight: 35, completedSets: 0 },
-            { name: "Leg Extension", sets: 3, reps: 10, weight: 35, completedSets: 0 },
-            { name: "Reverse Leg Curls", sets: 3, reps: 10, weight: 35, completedSets: 0 },
-            { name: "Calf Raise", sets: 1, reps: 30, weight: 35, completedSets: 0 },
-            { name: "Shoulder Press", sets: 2, reps: 15, weight: 35, completedSets: 0 },
-            { name: "Cable Lateral Raise", sets: 3, reps: 10, weight: 35, completedSets: 0 },
-            { name: "Cable Front Raise", sets: 3, reps: 10, weight: 35, completedSets: 0 },
+            { name: "Leg Press", sets: 3, reps: 10, completedSets: 0 },
+            { name: "Lunges", sets: 2, reps: 10, completedSets: 0 },
+            { name: "Assisted Squats", sets: 1, reps: 20, completedSets: 0 },
+            { name: "Leg Extension", sets: 3, reps: 10, completedSets: 0 },
+            { name: "Reverse Leg Curls", sets: 3, reps: 10, completedSets: 0 },
+            { name: "Calf Raise", sets: 1, reps: 30, completedSets: 0 },
+            { name: "Shoulder Press", sets: 2, reps: 15, completedSets: 0 },
+            { name: "Cable Lateral Raise", sets: 3, reps: 10, completedSets: 0 },
+            { name: "Cable Front Raise", sets: 3, reps: 10, completedSets: 0 }
           ]
         }
       ]
@@ -108,11 +107,14 @@
 
     function saveData(data) {
       localStorage.setItem("workoutData", JSON.stringify(data));
+      updateStats(data);
+
     }
 
     function updateStats(data) {
       const statBox = document.getElementById("stats");
       statBox.textContent = `Level: ${data.level} | EXP: ${data.exp % 100}/100`;
+
     }
 
     function gainExp(data, amount = 10) {
@@ -136,10 +138,9 @@
       const container = document.getElementById("exerciseList");
       const workout = data.workouts[workoutIndex];
       container.innerHTML = workout.exercises.map((ex, i) => `
-        <div class="bg-gray-800 p-4 rounded fade-in">
+        <div class="bg-gray-800 p-4 rounded fade-in ">
           <div class="flex justify-between items-center mb-2 items-baseline">
             <span class="font-bold text-lg">${ex.name}</span>
-            <input type="number" value="${ex.weight}" data-workout="${workoutIndex}" data-ex="${i}" class="bg-gray-700 text-white w-20 p-1 rounded weight-input">
           </div>
           <div class="flex space-x-2">
 
@@ -174,39 +175,30 @@
         };
       });
 
+      function setupEditor(data) {
+        const editor = document.getElementById("editor");
+        const textarea = document.getElementById("jsonEditor");
+        const btn = document.getElementById("editBtn");
+        const saveBtn = document.getElementById("saveJsonBtn");
 
-      container.querySelectorAll(".weight-input").forEach(input => {
-        input.onchange = (e) => {
-          const w = +input.dataset.workout;
-          const ex = +input.dataset.ex;
-          data.workouts[w].exercises[ex].weight = +e.target.value;
-          saveData(data);
+        btn.onclick = () => {
+          editor.classList.toggle("hidden");
+          textarea.value = JSON.stringify(data, null, 2);
         };
-      });
-    }
 
-    function setupEditor(data) {
-      const editor = document.getElementById("editor");
-      const textarea = document.getElementById("jsonEditor");
-      const btn = document.getElementById("editBtn");
-      const saveBtn = document.getElementById("saveJsonBtn");
+        saveBtn.onclick = () => {
+          try {
+            const newData = JSON.parse(textarea.value);
+            saveData(newData);
+            renderWorkouts(newData);
+            updateStats(newData);
+            editor.classList.add("hidden");
+          } catch (e) {
+            alert("Invalid JSON!");
+          }
+        };
+      }
 
-      btn.onclick = () => {
-        editor.classList.toggle("hidden");
-        textarea.value = JSON.stringify(data, null, 2);
-      };
-
-      saveBtn.onclick = () => {
-        try {
-          const newData = JSON.parse(textarea.value);
-          saveData(newData);
-          renderWorkouts(newData);
-          updateStats(newData);
-          editor.classList.add("hidden");
-        } catch (e) {
-          alert("Invalid JSON!");
-        }
-      };
     }
 
     function resetWorkout(data) {
