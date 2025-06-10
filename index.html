@@ -10,7 +10,6 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="w3.css">
   <link rel="stylesheet" href="index.css">
-  <script src="server.js"></script>
 </head>
 <!-- Icons from iconoir -->
 
@@ -33,7 +32,7 @@
     <div id="stats" class="text-center mb-4 text-lg">Level: 1 | EXP: 0/100</div>
     <select id="workoutSelect" class="w-full p-2 mb-4 bg-gray-800 text-white rounded"></select>
     <div id="exerciseList" class="space-y-4"></div>
-    <audio id="ding" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+    <audio id="ding" src="clang_and_wobble.oga"></audio>
   </div>
 
   <div class="hidden" id="server-iframe">
@@ -51,7 +50,41 @@
 
     </div>
   </div>
+  <template id="exercises-template">
+    <div class="bg-gray-800 p-4 rounded exercise-box" data-ex="{i}">
+      <div class="flex justify-between items-center mb-2 items-baseline">
+        <span class="font-bold text-lg">${ex.name}</span>
+      </div>
+      <div class="flex space-x-2">
 
+        <button class="btn-plus w3-btn w3-round-xxlarge w3-green w3-hover-light-green" data-workout="${workoutIndex}"
+          data-ex="${i}">
+          <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24"
+            fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffffff"
+            style="--darkreader-inline-color: var(--darkreader-text-ffffff, #e8e6e3);" data-darkreader-inline-color="">
+            <path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" style="--darkreader-inline-stroke: #ffffff;" data-darkreader-inline-stroke="">
+            </path>
+          </svg>
+        </button>
+        <button class="text-sm set-counter ">Sets Left: ${ex.sets - ex.completedSets}</button>
+        <button class="btn-minus w3-btn w3-round-xxlarge w3-red w3-hover-light-red" data-workout="${workoutIndex}"
+          data-ex="${i}">
+          <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24"
+            fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffffff"
+            style="--darkreader-inline-color: var(--darkreader-text-ffffff, #e8e6e3);" data-darkreader-inline-color="">
+            <path d="M6 12H18" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              style="--darkreader-inline-stroke: #ffffff;" data-darkreader-inline-stroke=""></path>
+          </svg>
+        </button>
+
+
+      </div>
+    </div>
+  </template>
+  <template id="days-template">
+    <option value="${i}">${w.name}</option>
+  </template>
   <script>
     const defaultData = {
       level: 1,
@@ -96,8 +129,16 @@
       ]
     };
     function backend() {
-      document.getElementById("exercise-iframe").classList.add("hidden");
-      document.getElementById("server-iframe").classList.remove("hidden");
+      const exe = document.getElementById("exercise-iframe");
+      const ser = document.getElementById("server-iframe");
+      setupEditor(data);
+      exe.style.animation = "fadeOut .5s forwards ease-in-out";
+      exe.classList.add("hidden");
+
+      ser.style.animation = "fadeIn .5s forwards ease-in-out";
+      ser.classList.remove("hidden");
+
+
     }
 
     function loadData() {
@@ -129,7 +170,10 @@
 
     function renderWorkouts(data) {
       const select = document.getElementById("workoutSelect");
-      select.innerHTML = data.workouts.map((w, i) => `<option value="${i}">${w.name}</option>`).join("");
+      const template = document.getElementById("days-template").innerHTML;
+      select.innerHTML = data.workouts.map((w, i) => {
+        return template.replace("${i}", i).replace("${w.name}", w.name);
+      }).join("");
       renderExercises(data, 0);
       select.onchange = (e) => renderExercises(data, e.target.value);
     }
@@ -137,21 +181,16 @@
     function renderExercises(data, workoutIndex) {
       const container = document.getElementById("exerciseList");
       const workout = data.workouts[workoutIndex];
-      container.innerHTML = workout.exercises.map((ex, i) => `
-        <div class="bg-gray-800 p-4 rounded fade-in ">
-          <div class="flex justify-between items-center mb-2 items-baseline">
-            <span class="font-bold text-lg">${ex.name}</span>
-          </div>
-          <div class="flex space-x-2">
+      const template = document.getElementById("exercises-template").innerHTML;
+      container.innerHTML = workout.exercises.map((ex, i) => {
+        return template
+          .replace(/\${ex\.name}/g, ex.name)
+          .replace(/\${ex\.sets - ex\.completedSets}/g, ex.sets - ex.completedSets)
+          .replace(/\${workoutIndex}/g, workoutIndex)
+          .replace(/\${i}/g, i);
+      }).join("");
 
-<button class="btn-plus w3-btn w3-round-xxlarge w3-green w3-hover-black" data-workout="${workoutIndex}" data-ex="${i}" ><?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffffff" style="--darkreader-inline-color: var(--darkreader-text-ffffff, #e8e6e3);" data-darkreader-inline-color=""><path d="M6 12H12M18 12H12M12 12V6M12 12V18" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="--darkreader-inline-stroke: #ffffff;" data-darkreader-inline-stroke=""></path></svg></button>
-            <p class="text-sm">Sets Left: ${ex.sets - ex.completedSets}</p>
-<button class="btn-minus w3-btn w3-round-xxlarge w3-red w3-hover-black" data-workout="${workoutIndex}" data-ex="${i}" ><?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffffff" style="--darkreader-inline-color: var(--darkreader-text-ffffff, #e8e6e3);" data-darkreader-inline-color=""><path d="M6 12H18" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="--darkreader-inline-stroke: #ffffff;" data-darkreader-inline-stroke=""></path></svg></button>
-
-
-            </div>
-        </div>`).join("");
-
+      container.style.animation = "fadeIn .5s forwards ease-in-out";
       container.querySelectorAll(".btn-plus").forEach(btn => {
         btn.onclick = () => {
           const w = +btn.dataset.workout;
@@ -164,6 +203,14 @@
           renderExercises(data, w);
         };
       });
+      function bounceShit(whichShit) {
+        const exerciseBox = document.querySelector(`[data-ex="${whichShit}"].exercise`);
+        exercise - box.classList.add('bounce');
+
+        exerciseBox.addEventListener('animationend', () => {
+          exerciseBox.classList.remove('bounce');
+        }, { once: true });
+      }
       container.querySelectorAll(".btn-minus").forEach(btn => {
         btn.onclick = () => {
           const w = +btn.dataset.workout;
@@ -172,33 +219,34 @@
           dataObj.completedSets--;
           saveData(data);
           renderExercises(data, w);
+
         };
       });
 
-      function setupEditor(data) {
-        const editor = document.getElementById("editor");
-        const textarea = document.getElementById("jsonEditor");
-        const btn = document.getElementById("editBtn");
-        const saveBtn = document.getElementById("saveJsonBtn");
 
-        btn.onclick = () => {
-          editor.classList.toggle("hidden");
-          textarea.value = JSON.stringify(data, null, 2);
-        };
+    }
+    function setupEditor(data) {
+      const editor = document.getElementById("editor");
+      const textarea = document.getElementById("jsonEditor");
+      const btn = document.getElementById("editBtn");
+      const saveBtn = document.getElementById("saveJsonBtn");
 
-        saveBtn.onclick = () => {
-          try {
-            const newData = JSON.parse(textarea.value);
-            saveData(newData);
-            renderWorkouts(newData);
-            updateStats(newData);
-            editor.classList.add("hidden");
-          } catch (e) {
-            alert("Invalid JSON!");
-          }
-        };
-      }
+      btn.onclick = () => {
+        editor.classList.toggle("hidden");
+        textarea.value = JSON.stringify(data, null, 2);
+      };
 
+      saveBtn.onclick = () => {
+        try {
+          const newData = JSON.parse(textarea.value);
+          saveData(newData);
+          renderWorkouts(newData);
+          updateStats(newData);
+          editor.classList.add("hidden");
+        } catch (e) {
+          alert("Invalid JSON!");
+        }
+      };
     }
 
     function resetWorkout(data) {
@@ -234,7 +282,6 @@
     const data = loadData();
     renderWorkouts(data);
     updateStats(data);
-    setupEditor(data);
   </script>
 </body>
 

@@ -26,3 +26,6 @@ Array.from({ length: ex.sets }).map((\_, j) => ...):
         .map() callbacks: w, i, and j get their values because the map function is designed to pass the current item and its index (and sometimes the array itself) as arguments to the callback function you provide for each iteration.
 
 Event Handlers: Inside event handlers for dynamically created elements, the script often relies on data-\* attributes that were set on those elements during their creation. The event handler can then read these attributes from the specific element that triggered the event (btn or input in your case) to "know" which item it's associated with.
+
+TODO
+https://animejs.com/documentation
