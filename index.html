@@ -38,10 +38,10 @@
   <div class="hidden" id="server-iframe">
     <button id="editBtn" class="mt-6 w-full p-2 bg-yellow-500 text-black font-bold rounded">🛠️ Edit
       Workout</button>
-    <button id="resetBtn" class="mt-6 w-full p-2 bg-red-500 text-black font-bold rounded" onclick="resetWorkout()">🔄
+    <button id="resetBtn" class="mt-6 w-full p-2 bg-red-500 text-black font-bold rounded" onclick="resetWorkout(data)">🔄
       Reset
       Workout</button>
-    <button id="newCycle" class="mt-6 w-full p-2 bg-green-500 text-black font-bold rounded" onclick="newCycle()">🔄
+    <button id="newCycle" class="mt-6 w-full p-2 bg-green-500 text-black font-bold rounded" onclick="newCycle(data)">🔄
       New Cycle
     </button>
     <div id="editor" class="hidden mt-4">
@@ -53,7 +53,12 @@
   <template id="exercises-template">
     <div class="bg-gray-800 p-4 rounded exercise-box" data-ex="{i}">
       <div class="flex justify-between items-center mb-2 items-baseline">
-        <span class="font-bold text-lg">${ex.name}</span>
+        <span class="font-bold ex-name text-xl">${ex.name}</span>
+        <span class="font-bold icon-container"><img class="icon" src="/icons/${ex.icon_id}.png" >
+            <img class="icon" src="/icons/${ex.icon_alt}.png" alt="">
+        
+        </span>
+
       </div>
       <div class="flex space-x-2">
 
@@ -93,37 +98,37 @@
         {
           name: "TRICEST",
           exercises: [
-            { name: "Chest Press", sets: 3, reps: 10, completedSets: 0 },
-            { name: "Chest Fly", sets: 3, reps: 10, completedSets: 0 },
-            { name: "FacePulls", sets: 3, reps: 10, completedSets: 0 },
-            { name: "Tricep Pushdowns ", sets: 3, reps: 10, completedSets: 0 },
-            { name: "Tricep Overhead Extension ", sets: 3, reps: 10, completedSets: 0 },
-            { name: "Cardio", sets: 1, reps: 10, completedSets: 0 }
+            { name: "Chest Press", sets: 3, reps: 10, completedSets: 0, icon_id: "chest_1" },
+            { name: "Chest Fly", sets: 3, reps: 10, completedSets: 0, icon_id: "chest_1" },
+            { name: "FacePulls", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_1" ,icon_alt:"cable_3"},
+            { name: "Tricep Pushdowns ", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_2" ,icon_alt:"cable_3"},
+            { name: "Tricep Overhead Extension ", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_2",icon_alt:"cable_3" },
+            { name: "Cardio", sets: 1, reps: 10, completedSets: 0, icon_id: "cardio_2" }
           ]
         },
         {
           name: "BIBACK",
           exercises: [
-            { name: "Lat Pulldown", sets: 3, reps: 12, completedSets: 0 },
-            { name: "Seated Row", sets: 3, reps: 12, completedSets: 0 },
-            { name: "Preacher", sets: 3, reps: 12, completedSets: 0 },
-            { name: "Cable Band Pull Aparts", sets: 3, reps: 12, completedSets: 0 },
-            { name: "Cable Hammer Curl", sets: 3, reps: 12, completedSets: 0 },
-            { name: "Cardio", sets: 1, reps: 10, completedSets: 0 }
+            { name: "Lat Pulldown", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_3" ,icon_alt:"cable_3"},
+            { name: "Seated Row", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_4" },
+            { name: "Preacher", sets: 3, reps: 12, completedSets: 0, icon_id: "hand" },
+            { name: "Cable Band Pull Aparts", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_2" ,icon_alt:"cable_3"},
+            { name: "Cable Hammer Curl", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_1" ,icon_alt:"cable_4"},
+            { name: "Cardio", sets: 1, reps: 10, completedSets: 0, icon_id: "cardio_1" }
           ]
         },
         {
           name: "Shoug",
           exercises: [
-            { name: "Leg Press", sets: 3, reps: 10, completedSets: 0 },
-            { name: "Lunges", sets: 2, reps: 10, completedSets: 0 },
-            { name: "Assisted Squats", sets: 1, reps: 20, completedSets: 0 },
-            { name: "Leg Extension", sets: 3, reps: 10, completedSets: 0 },
-            { name: "Reverse Leg Curls", sets: 3, reps: 10, completedSets: 0 },
-            { name: "Calf Raise", sets: 1, reps: 30, completedSets: 0 },
-            { name: "Shoulder Press", sets: 2, reps: 15, completedSets: 0 },
-            { name: "Cable Lateral Raise", sets: 3, reps: 10, completedSets: 0 },
-            { name: "Cable Front Raise", sets: 3, reps: 10, completedSets: 0 }
+            { name: "Leg Press", sets: 3, reps: 10, completedSets: 0, icon_id: "leg_1" },
+            { name: "Lunges", sets: 2, reps: 10, completedSets: 0, icon_id: "leg_1" },
+            { name: "Assisted Squats", sets: 1, reps: 20, completedSets: 0, icon_id: "leg_2" },
+            { name: "Leg Extension", sets: 3, reps: 10, completedSets: 0, icon_id: "leg_1" },
+            { name: "Reverse Leg Curls", sets: 3, reps: 10, completedSets: 0, icon_id: "leg_1" },
+            { name: "Calf Raise", sets: 1, reps: 30, completedSets: 0, icon_id: "leg_2" },
+            { name: "Shoulder Press", sets: 2, reps: 15, completedSets: 0, icon_id: "chest_1" },
+            { name: "Cable Lateral Raise", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_2",icon_alt:"cable_4" },
+            { name: "Cable Front Raise", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_1",icon_alt:"cable_4" }
           ]
         }
       ]
@@ -143,7 +148,23 @@
 
     function loadData() {
       const saved = localStorage.getItem("workoutData");
-      return saved ? JSON.parse(saved) : defaultData;
+      const dataToReturn = saved ? JSON.parse(saved) : defaultData;
+      defaultData.workouts.forEach((wDefault, i) => {
+        const wSaved = dataToReturn.workouts[i];
+        if (wSaved) {
+          wDefault.exercises.forEach((exDefault, j) => {
+            const exSaved = wSaved.exercises[j];
+            if (exSaved) {
+              if (exDefault.name === exSaved.name) {
+                exSaved.icon_id = exDefault.icon_id;
+                exSaved.icon_alt = exDefault.icon_alt;
+              }
+            }
+          });
+        }
+      });
+      return dataToReturn;
+
     }
 
     function saveData(data) {
@@ -185,6 +206,8 @@
       container.innerHTML = workout.exercises.map((ex, i) => {
         return template
           .replace(/\${ex\.name}/g, ex.name)
+          .replace(/\${ex\.icon_id}/g, ex.icon_id)
+          .replace(/\${ex\.icon_alt}/g, ex.icon_alt ? ex.icon_alt : "")
           .replace(/\${ex\.sets - ex\.completedSets}/g, ex.sets - ex.completedSets)
           .replace(/\${workoutIndex}/g, workoutIndex)
           .replace(/\${i}/g, i);

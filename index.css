@@ -15,6 +15,7 @@ html {
     transform: translateY(0);
   }
 }
+
 @keyframes fadeOut {
   to {
     opacity: 0;
@@ -26,6 +27,7 @@ html {
     transform: translateY(0);
   }
 }
+
 #server-iframe {
   border: orange;
   width: 70%;
@@ -34,19 +36,23 @@ html {
   text-align: center;
   margin-left: 15%;
 }
+
 @keyframes shimmer {
   0% {
     background-position: -200px 0;
   }
+
   100% {
     background-position: 200px 0;
   }
 }
+
 #set-counter {
   animation: shimmer 5 ease-in-out 0.5 infinite forwards ease-in-out;
 }
 
 @keyframes bounce {
+
   0%,
   20%,
   50%,
@@ -54,14 +60,46 @@ html {
   100% {
     transform: translateY(0);
   }
+
   40% {
     transform: translateY(-30px);
   }
+
   60% {
     transform: translateY(-15px);
   }
 }
+
 .bounce {
   animation: bounce 2s ease-in-out infinite;
   transform-origin: center bottom;
+}
+
+.icon-container {
+  display: inline-flex;
+  align-items: baseline;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: fit-content;
+  justify-content: flex-end;
+  gap: 5px;
+}
+
+.icon {
+  width: 10%;
+  height: 10%;
+}
+
+.exercise-box:hover {
+  transform: translateY(-5px);
+}
+
+.exercise-box {
+  width: 100%;
+}
+
+.ex-name {
+  margin-right: 5px;
+  width: max-content;
+  overflow: scroll;
 }
