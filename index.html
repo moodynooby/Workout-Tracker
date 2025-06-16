@@ -38,7 +38,8 @@
   <div class="hidden" id="server-iframe">
     <button id="editBtn" class="mt-6 w-full p-2 bg-yellow-500 text-black font-bold rounded">🛠️ Edit
       Workout</button>
-    <button id="resetBtn" class="mt-6 w-full p-2 bg-red-500 text-black font-bold rounded" onclick="resetWorkout(data)">🔄
+    <button id="resetBtn" class="mt-6 w-full p-2 bg-red-500 text-black font-bold rounded"
+      onclick="resetWorkout(data)">🔄
       Reset
       Workout</button>
     <button id="newCycle" class="mt-6 w-full p-2 bg-green-500 text-black font-bold rounded" onclick="newCycle(data)">🔄
@@ -54,14 +55,11 @@
     <div class="bg-gray-800 p-4 rounded exercise-box" data-ex="{i}">
       <div class="flex justify-between items-center mb-2 items-baseline">
         <span class="font-bold ex-name text-xl">${ex.name}</span>
-        <span class="font-bold icon-container"><img class="icon" src="/icons/${ex.icon_id}.png" >
-            <img class="icon" src="/icons/${ex.icon_alt}.png" alt="">
-        
+        <span class="font-bold icon-container"><img class="icon" src="/icons/${ex.icon_id}.png">
+          <img class="icon" src="/icons/${ex.icon_alt}.png" alt="">
         </span>
-
       </div>
-      <div class="flex space-x-2">
-
+      <div class="flex space-x-2 mb-2">
         <button class="btn-plus w3-btn w3-round-xxlarge w3-green w3-hover-light-green" data-workout="${workoutIndex}"
           data-ex="${i}">
           <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24"
@@ -72,7 +70,7 @@
             </path>
           </svg>
         </button>
-        <button class="text-sm set-counter ">Sets Left: ${ex.sets - ex.completedSets}</button>
+        <button class="text-sm set-counter">Sets Left: ${ex.sets - ex.completedSets}</button>
         <button class="btn-minus w3-btn w3-round-xxlarge w3-red w3-hover-light-red" data-workout="${workoutIndex}"
           data-ex="${i}">
           <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" viewBox="0 0 24 24"
@@ -82,8 +80,14 @@
               style="--darkreader-inline-stroke: #ffffff;" data-darkreader-inline-stroke=""></path>
           </svg>
         </button>
-
-
+      </div>
+      <div class="pr-container flex items-center justify-between bg-gray-700 p-2 rounded">
+        <span class="text-sm font-bold">PR:</span>
+        <span class="pr-value text-yellow-400">${ex.pr} KG</span>
+        <div class="pr-controls flex space-x-1">
+          <input type="number" class="pr-input w-16 bg-gray-800 text-white text-center rounded"
+            data-workout="${workoutIndex}" data-ex="${i}" value="${ex.pr}">
+        </div>
       </div>
     </div>
   </template>
@@ -98,37 +102,37 @@
         {
           name: "TRICEST",
           exercises: [
-            { name: "Chest Press", sets: 3, reps: 10, completedSets: 0, icon_id: "chest_1" },
-            { name: "Chest Fly", sets: 3, reps: 10, completedSets: 0, icon_id: "chest_1" },
-            { name: "FacePulls", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_1" ,icon_alt:"cable_3"},
-            { name: "Tricep Pushdowns ", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_2" ,icon_alt:"cable_3"},
-            { name: "Tricep Overhead Extension ", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_2",icon_alt:"cable_3" },
-            { name: "Cardio", sets: 1, reps: 10, completedSets: 0, icon_id: "cardio_2" }
+            { name: "Chest Press", sets: 3, reps: 10, completedSets: 0, icon_id: "chest_1", pr: 0 },
+            { name: "Chest Fly", sets: 3, reps: 10, completedSets: 0, icon_id: "chest_1", pr: 0 },
+            { name: "Tricep Pushdowns ", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_2", icon_alt: "cable_3", pr: 0 },
+            { name: "Tricep Overhead Extension ", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_2", icon_alt: "cable_4", pr: 0 },
+            { name: "Cardio", sets: 1, reps: 10, completedSets: 0, icon_id: "cardio_2", pr: 0 }
           ]
         },
         {
           name: "BIBACK",
           exercises: [
-            { name: "Lat Pulldown", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_3" ,icon_alt:"cable_3"},
-            { name: "Seated Row", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_4" },
-            { name: "Preacher", sets: 3, reps: 12, completedSets: 0, icon_id: "hand" },
-            { name: "Cable Band Pull Aparts", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_2" ,icon_alt:"cable_3"},
-            { name: "Cable Hammer Curl", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_1" ,icon_alt:"cable_4"},
-            { name: "Cardio", sets: 1, reps: 10, completedSets: 0, icon_id: "cardio_1" }
+            { name: "Lat Pulldown", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_3", icon_alt: "cable_3", pr: 0 },
+            { name: "Seated Row", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_4", pr: 0 },
+            { name: "Preacher", sets: 3, reps: 12, completedSets: 0, icon_id: "hand", pr: 0 },
+            { name: "Cable Band Pull Aparts", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_2", icon_alt: "cable_3", pr: 0 },
+            { name: "Cable Hammer Curl", sets: 3, reps: 12, completedSets: 0, icon_id: "cable_1", icon_alt: "cable_4", pr: 0 },
+            { name: "Cardio", sets: 1, reps: 10, completedSets: 0, icon_id: "cardio_1", pr: 0 }
           ]
         },
         {
           name: "Shoug",
           exercises: [
-            { name: "Leg Press", sets: 3, reps: 10, completedSets: 0, icon_id: "leg_1" },
-            { name: "Lunges", sets: 2, reps: 10, completedSets: 0, icon_id: "leg_1" },
-            { name: "Assisted Squats", sets: 1, reps: 20, completedSets: 0, icon_id: "leg_2" },
-            { name: "Leg Extension", sets: 3, reps: 10, completedSets: 0, icon_id: "leg_1" },
-            { name: "Reverse Leg Curls", sets: 3, reps: 10, completedSets: 0, icon_id: "leg_1" },
-            { name: "Calf Raise", sets: 1, reps: 30, completedSets: 0, icon_id: "leg_2" },
-            { name: "Shoulder Press", sets: 2, reps: 15, completedSets: 0, icon_id: "chest_1" },
-            { name: "Cable Lateral Raise", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_2",icon_alt:"cable_4" },
-            { name: "Cable Front Raise", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_1",icon_alt:"cable_4" }
+            { name: "Leg Press", sets: 3, reps: 10, completedSets: 0, icon_id: "leg_1", pr: 0 },
+            { name: "Lunges", sets: 2, reps: 10, completedSets: 0, icon_id: "leg_1", pr: 0 },
+            { name: "Assisted Squats", sets: 1, reps: 20, completedSets: 0, icon_id: "leg_2", pr: 0 },
+            { name: "Leg Extension", sets: 3, reps: 10, completedSets: 0, icon_id: "leg_1", pr: 0 },
+            { name: "Reverse Leg Curls", sets: 3, reps: 10, completedSets: 0, icon_id: "leg_1", pr: 0 },
+            { name: "Calf Raise", sets: 1, reps: 30, completedSets: 0, icon_id: "leg_2", pr: 0 },
+            { name: "Shoulder Press", sets: 2, reps: 15, completedSets: 0, icon_id: "chest_1", pr: 0 },
+            { name: "FacePulls", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_1", icon_alt: "cable_3", pr: 0 },
+            { name: "Cable Lateral Raise", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_2", icon_alt: "cable_4", pr: 0 },
+            { name: "Cable Front Raise", sets: 3, reps: 10, completedSets: 0, icon_id: "cable_1", icon_alt: "cable_4", pr: 0 }
           ]
         }
       ]
@@ -209,11 +213,14 @@
           .replace(/\${ex\.icon_id}/g, ex.icon_id)
           .replace(/\${ex\.icon_alt}/g, ex.icon_alt ? ex.icon_alt : "")
           .replace(/\${ex\.sets - ex\.completedSets}/g, ex.sets - ex.completedSets)
+          .replace(/\${ex\.pr}/g, ex.pr)
           .replace(/\${workoutIndex}/g, workoutIndex)
-          .replace(/\${i}/g, i);
+          .replace(/\${i}/g, i)
       }).join("");
 
       container.style.animation = "fadeIn .5s forwards ease-in-out";
+
+      // Set button handlers
       container.querySelectorAll(".btn-plus").forEach(btn => {
         btn.onclick = () => {
           const w = +btn.dataset.workout;
@@ -226,27 +233,80 @@
           renderExercises(data, w);
         };
       });
-      function bounceShit(whichShit) {
-        const exerciseBox = document.querySelector(`[data-ex="${whichShit}"].exercise`);
-        exercise - box.classList.add('bounce');
 
-        exerciseBox.addEventListener('animationend', () => {
-          exerciseBox.classList.remove('bounce');
-        }, { once: true });
-      }
       container.querySelectorAll(".btn-minus").forEach(btn => {
         btn.onclick = () => {
           const w = +btn.dataset.workout;
           const ex = +btn.dataset.ex;
           const dataObj = data.workouts[w].exercises[ex];
-          dataObj.completedSets--;
-          saveData(data);
-          renderExercises(data, w);
-
+          if (dataObj.completedSets > 0) {
+            dataObj.completedSets--;
+            saveData(data);
+            renderExercises(data, w);
+          }
         };
       });
 
+      // PR button handlers
+      container.querySelectorAll(".btn-pr-plus").forEach(btn => {
+        btn.onclick = () => {
+          const w = +btn.dataset.workout;
+          const ex = +btn.dataset.ex;
+          const dataObj = data.workouts[w].exercises[ex];
+          dataObj.pr++;
+          saveData(data);
+          renderExercises(data, w);
+        };
+      });
 
+      container.querySelectorAll(".btn-pr-minus").forEach(btn => {
+        btn.onclick = () => {
+          const w = +btn.dataset.workout;
+          const ex = +btn.dataset.ex;
+          const dataObj = data.workouts[w].exercises[ex];
+          if (dataObj.pr > 0) {
+            dataObj.pr--;
+            saveData(data);
+            renderExercises(data, w);
+          }
+        };
+      });
+
+      // PR input handler
+      container.querySelectorAll(".pr-input").forEach(input => {
+        input.onchange = () => {
+          const w = +input.dataset.workout;
+          const ex = +input.dataset.ex;
+          const dataObj = data.workouts[w].exercises[ex];
+          const newValue = parseInt(input.value);
+          if (!isNaN(newValue) && newValue >= 0) {
+            dataObj.pr = newValue;
+            saveData(data);
+
+            // Add bounce animation to exercise box
+            const exerciseBox = document.querySelector(`[data-ex="${ex}"].exercise-box`);
+            if (exerciseBox) {
+              exerciseBox.classList.add('pulse');
+              exerciseBox.addEventListener('animationend', () => {
+                exerciseBox.classList.remove('pulse');
+              }, { once: true });
+            }
+
+            renderExercises(data, w);
+          } else {
+            input.value = dataObj.pr; // Reset to current value if invalid
+          }
+        };
+      });
+      function bounceShit(whichShit) {
+        const exerciseBox = document.querySelector(`[data-ex="${whichShit}"].exercise-box`);
+        if (exerciseBox) {
+          exerciseBox.classList.add('bounce');
+          exerciseBox.addEventListener('animationend', () => {
+            exerciseBox.classList.remove('bounce');
+          }, { once: true });
+        }
+      }
     }
     function setupEditor(data) {
       const editor = document.getElementById("editor");
@@ -275,9 +335,28 @@
     function resetWorkout(data) {
       const resetBtn = document.getElementById("resetBtn");
       resetBtn.onclick = () => {
-        saveData(defaultData);
-        renderWorkouts(defaultData);
-        location.reload(); // Refresh the page
+        if (confirm("Reset workout progress? Your personal records (PR) will be preserved.")) {
+          // Create a new data object that preserves PR values
+          const currentData = loadData();
+          const newData = JSON.parse(JSON.stringify(defaultData));
+
+          // Transfer PR values from current data to new data where exercise names match
+          newData.workouts.forEach((workout, workoutIndex) => {
+            const currentWorkout = currentData.workouts[workoutIndex];
+            if (currentWorkout) {
+              workout.exercises.forEach((exercise, exerciseIndex) => {
+                const currentExercise = currentWorkout.exercises.find(ex => ex.name === exercise.name);
+                if (currentExercise && currentExercise.pr) {
+                  exercise.pr = currentExercise.pr;
+                }
+              });
+            }
+          });
+
+          saveData(newData);
+          renderWorkouts(newData);
+          location.reload(); // Refresh the page
+        }
       };
     }
 
@@ -292,17 +371,18 @@
             ...workout,
             exercises: workout.exercises.map(ex => ({
               ...ex,
-              completedSets: 0 // Reset completed sets
+              completedSets: 0, // Reset completed sets
+              pr: ex.pr || 0 // Preserve PR values
             }))
           }))
         };
         saveData(newData);
         renderWorkouts(newData);
         location.reload(); // Refresh the page
-
       };
     }
     const data = loadData();
+
     renderWorkouts(data);
     updateStats(data);
   </script>
